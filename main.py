@@ -75,7 +75,7 @@ def main():
         # Apply changes
         print("Applying changes")
         applied_data = json.loads(http.request("GET",f"{config['HAProxyHostApi']}/api/v2/services/haproxy/apply").data.decode("utf-8"))
-        print(applied_changes)
+        print(applied_data)
         http.request("POST", f"{config['HAProxyHostApi']}/api/v2/services/haproxy/apply")
 
 if __name__ == "__main__":
