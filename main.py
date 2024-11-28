@@ -6,16 +6,16 @@ import time
 import urllib3
 from kubernetes import client as kubeclient, config as kubeconfig
 
-with open("appsettings.json", "r", encoding="UTF8") as file:
+with open("./config/appsettings.json", "r", encoding="UTF8") as file:
     config = json.loads(file.read())
 
 http = urllib3.PoolManager(
     cert_reqs='CERT_REQUIRED',
-    ca_certs='cacerts.pem',
+    ca_certs='./config/cacerts.pem',
     headers=urllib3.make_headers(basic_auth=f"{config['USERNAME']}:{config['PASSWORD']}")
 )
 
-kubeconfig.load_kube_config("config.yaml")
+kubeconfig.load_kube_config("./config/config.yaml")
 kube_client = kubeclient.CoreV1Api()
 
 
@@ -39,7 +39,7 @@ def main():
     while contains_kube:
         data = get_data(item_id)
         if data[1] == 200:
-            if  "RS-03-KUB-01" in data[0].get('name'):
+            if  config["BACKEND_SEARCH_STRING"] in data[0].get('name'):
                 config_list.append(data[0])
         else:
             contains_kube = False
@@ -79,6 +79,7 @@ def main():
         http.request("POST", f"{config['HAProxyHostApi']}/api/v2/services/haproxy/apply")
 
 if __name__ == "__main__":
+    print("Starting KBProxy Redshift Connector")
     while True:
         main()
         time.sleep(1200)
