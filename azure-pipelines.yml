@@ -1,0 +1,36 @@
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - master
+
+resources:
+- repo: self
+
+stages:
+- stage: Build_KBProxy_Image
+  displayName: Build KBProxy image
+  jobs:
+  - job: Build_KBProxy_Image
+    displayName: Build KBProxy image
+    pool:
+      name: Redshift-OnPrem-Linux
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Building KBProxy Image
+      inputs:
+        command: buildAndPush
+        containerRegistry: 'Internal RS-DockerRegistry'
+        repository: 'kbproxy'
+        dockerfile: './Dockerfile'
+        tags: latest
+    - task: CmdLine@2
+      displayName: Cleaning up images older than 24H
+      inputs:
+       script: 'docker system prune -a --force --filter "until=24h"' 
+
+    - task: CmdLine@2
+      displayName: Cleaning up unneeded images
+      inputs:
+       script: 'docker system prune -f'
