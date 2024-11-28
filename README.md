@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/RedshiftEnt/Redshift-CICD/_apis/build/status%2FPersonal%20Projects%2FKBProxy?branchName=main)](https://dev.azure.com/RedshiftEnt/Redshift-CICD/_build/latest?definitionId=45&branchName=main)
+<img src="https://dev.azure.com/RedshiftEnt/Redshift-CICD/_apis/build/status%2FPersonal%20Projects%2FKBProxy?branchName=main"/>
 
 Very simple sync between live nodes and an pfSense HAProxy instance.
 Configured by default to run once every 20 minutes, only applying changes when required.
