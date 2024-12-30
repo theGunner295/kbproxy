@@ -2,7 +2,6 @@
 
 import json
 import re
-import time
 import urllib3
 from kubernetes import client as kubeclient, config as kubeconfig
 
@@ -64,10 +63,12 @@ def main():
     applied_changes = False
     # Process the servers that require removing first
     for server in server_requires_removing:
+        print("Removing server: ", server['name'])
         applied_changes = True
         http.request("DELETE", f"{config['HAProxyHostApi']}/api/v2/services/haproxy/backend/server/?parent_id={server['parent_id']}&id={server['id']}")
     # Process the servers that require adding
     for server in server_requires_adding:
+        print("Adding server: ", server['name'])
         applied_changes = True
         http.request("POST", f"{config['HAProxyHostApi']}/api/v2/services/haproxy/backend/server", body=json.dumps(server))
 
@@ -77,9 +78,9 @@ def main():
         applied_data = json.loads(http.request("GET",f"{config['HAProxyHostApi']}/api/v2/services/haproxy/apply").data.decode("utf-8"))
         print(applied_data)
         http.request("POST", f"{config['HAProxyHostApi']}/api/v2/services/haproxy/apply")
+    else:
+        print("No changes required")
 
 if __name__ == "__main__":
     print("Starting KBProxy Redshift Connector")
-    while True:
-        main()
-        time.sleep(1200)
+    main()
