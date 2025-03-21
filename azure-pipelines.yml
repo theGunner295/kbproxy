@@ -21,8 +21,8 @@ stages:
       displayName: Building KBProxy Image
       inputs:
         command: buildAndPush
-        containerRegistry: 'Internal RS-DockerRegistry'
-        repository: 'kbproxy'
+        containerRegistry: 'Internal RS-DockerRegistry Personal'
+        repository: 'personal/kbproxy'
         dockerfile: './Dockerfile'
         tags: latest
     - task: CmdLine@2
